@@ -1,9 +1,9 @@
 /*
    _____ ____  ___     ______
   / ___// __ \/   |   / ____/
-  \__ \/ /_/ / /| |  / /     
- ___/ / ____/ ___ |_/ /___   
-/____/_/   /_/  |_(_)____/   
+  \__ \/ /_/ / /| |  / /
+ ___/ / ____/ ___ |_/ /___
+/____/_/   /_/  |_(_)____/
 
 created by sunlitHorizon, 2024
 -the spaghettiest code you'll ever see :)
@@ -71,10 +71,19 @@ int main(int argc, char *argv[]) {
     //initialize ncurses
     initscr();
     timeout(0);
+    start_color();
     noecho();
     cbreak();
     curs_set(0);
     keypad(stdscr, TRUE);
+
+    init_pair(0, COLOR_BLACK, COLOR_BLACK);
+    init_pair(1, COLOR_WHITE, COLOR_BLACK);
+    init_pair(2, COLOR_WHITE, COLOR_BLACK);
+    init_pair(3, COLOR_BLUE, COLOR_BLACK);
+    init_pair(4, COLOR_RED, COLOR_BLACK);
+    init_pair(5, COLOR_YELLOW, COLOR_RED);
+    init_pair(6, COLOR_CYAN, COLOR_BLACK);
 
     while (1) { //game loop
     clear(); //clear the screen
@@ -119,7 +128,7 @@ int main(int argc, char *argv[]) {
 
                     xyMatrix[x][y].type = 0;
                 } else { xyMatrix[x][y].state -= 1; }
-                
+
             }
             //move enemy
             if (xyMatrix[x][y].type == 2) {
@@ -132,21 +141,25 @@ int main(int argc, char *argv[]) {
 
                     xyMatrix[x][y].type = 0;
                 } else { xyMatrix[x][y].state -= 1; }
-                
+
             }
 
             if (xyMatrix[x][y].type == 5) {
                 if (xyMatrix[x][y].state == 0) { xyMatrix[x][y].type = 0; }
                 else { xyMatrix[x][y].state=0; }
             }
-
+            attron(COLOR_PAIR(xyMatrix[x][y].type));
             printw("%c ", CHARLIST[xyMatrix[x][y].type]);
+            attroff(COLOR_PAIR(xyMatrix[x][y].type));
 
         }
         printw("\n"); //newline after finishing a row
     }
 
-    printw("SCORE: %d\n> ", score);
+    printw("SCORE: ");
+    attron(COLOR_PAIR(6));
+    printw("%d\n> ", score);
+    attroff(COLOR_PAIR(6));
 
     int key = getch(); //read dumbass input
 
@@ -175,7 +188,7 @@ int main(int argc, char *argv[]) {
 
         case KEY_LEFT:
             if (playerXY[0] > 0) {
-                xyMatrix[playerXY[0]][playerXY[1]].type = 0; 
+                xyMatrix[playerXY[0]][playerXY[1]].type = 0;
                 playerXY[0]--;
             }
             xyMatrix[playerXY[0]][playerXY[1]].type = 1;
@@ -208,7 +221,9 @@ int main(int argc, char *argv[]) {
     }
 
     if (lost == 2) {
+	attron(COLOR_PAIR(4));
         printw("You died!");
+	attroff(COLOR_PAIR(4));
         refresh();
         sleep(3); //3s
         break;
@@ -225,5 +240,4 @@ int main(int argc, char *argv[]) {
   return 0; //if this ever happens, my brain has at least 2 braincells
 
 }
-
 
