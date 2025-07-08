@@ -5,7 +5,7 @@
  ___/ / ____/ ___ |_/ /___
 /____/_/   /_/  |_(_)____/
 
-created by sunlitHorizon, 2024
+created by servalx4, 2024
 -the spaghettiest code you'll ever see :)
 */
 
